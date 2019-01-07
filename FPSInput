@@ -1,0 +1,57 @@
+using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
+
+[RequireComponent(typeof(CharacterController))]
+// not absolutely needed, good programming practice
+[AddComponentMenu("Control Script/FPS Input")]
+public class FPSInput : MonoBehaviour {
+	public float speed = 6.0f;
+	public float gravity = -9.8f;
+	public static int pickUpValue;
+	public AudioSource Eating;
+
+
+	
+	private CharacterController _charController;
+	// Different game objects might want to use CharacterController
+
+	private int count;
+
+    void Start()
+    {
+        _charController = GetComponent<CharacterController>();
+
+    }
+
+	
+	void Update() {
+			//transform.Translate(Input.GetAxis("Horizontal") * speed * Time.deltaTime, 0, Input.GetAxis("Vertical") * speed * Time.deltaTime);
+			float deltaX = Input.GetAxis ("Horizontal") * speed;
+			float deltaZ = Input.GetAxis ("Vertical") * speed;
+			Vector3 movement = new Vector3 (deltaX, 0, deltaZ);
+			movement = Vector3.ClampMagnitude (movement, speed);
+			// Don't want diagonal movement going to fast
+		
+			movement.y = gravity;
+			// Controls tilting. Set gravity to "0" if you want character to fly
+		
+			movement *= Time.deltaTime;
+			movement = transform.TransformDirection (movement);
+			_charController.Move (movement);
+	}
+	void OnTriggerEnter(Collider other)
+	{
+		pickUpValue = 1;
+		if (other.gameObject.CompareTag ("Pick Up")) {
+			Eating.enabled = false;
+			other.gameObject.SetActive (false);
+			Eating.enabled = true;
+			pickUpValue = 100;
+		}
+		if (other.gameObject.CompareTag ("Diamond")) {
+			Application.LoadLevel (3);
+            Cursor.lockState = CursorLockMode.None;
+		}
+	}
+}
