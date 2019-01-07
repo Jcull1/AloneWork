@@ -1,0 +1,67 @@
+using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
+public class Hunger : MonoBehaviour {
+	double hunger = 1000.0f;
+	public Text YouDiedText;
+	public Text HungerText;
+	public Image hunger5;
+	public Image hunger4;
+	public Image hunger3;
+	public Image hunger2;
+	public Image hunger1;
+	public double value;
+	int foodvalue;
+
+	void FixedUpdate () 
+	{
+		foodvalue = FPSInput.pickUpValue;
+		hunger -= .5;
+		value = hunger;
+		if (foodvalue == 100) {
+			hunger = 1000.5f;
+			foodvalue = FPSInput.pickUpValue;
+		}
+			if (hunger >= 800) {
+			hunger5.enabled = true;
+			hunger4.enabled = true;
+			hunger3.enabled = true;
+			hunger2.enabled = true;
+			hunger1.enabled = true;
+			foodvalue = FPSInput.pickUpValue;
+		} else if (hunger >= 600) {
+			hunger5.enabled = false;
+			hunger4.enabled = true;
+			hunger3.enabled = true;
+			hunger2.enabled = true;
+			hunger1.enabled = true;
+			foodvalue = FPSInput.pickUpValue;
+		} else if (hunger >= 400) {
+			hunger5.enabled = false;
+			hunger4.enabled = false;
+			hunger3.enabled = true;
+			hunger2.enabled = true;
+			hunger1.enabled = true;
+			foodvalue = FPSInput.pickUpValue;
+				
+		} else if (hunger >= 200) {
+			hunger5.enabled = false;
+			hunger4.enabled = false;
+			hunger3.enabled = false;
+			hunger2.enabled = true;
+			hunger1.enabled = true;
+			foodvalue = FPSInput.pickUpValue;
+	
+		} else if (hunger >= 0) {
+			hunger5.enabled = false;
+			hunger4.enabled = false;
+			hunger3.enabled = false;
+			hunger2.enabled = false;
+			hunger1.enabled = true;
+			foodvalue = FPSInput.pickUpValue;
+		}else if (hunger <0) {
+			Application.LoadLevel(4);
+            Cursor.lockState = CursorLockMode.None;
+		}
+	}
+}
